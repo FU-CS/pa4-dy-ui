@@ -23,6 +23,19 @@ class BSTTest {
         assertEquals(5, bst.root.value);
         assertEquals(3, bst.root.left.value);
         assertEquals(7, bst.root.right.value);
+        
+        
+    }
+    @Test
+    void testInsert2() {
+    	BST bst = new BST();
+    	assertEquals("", bst.inOrder()); // empty
+        bst.insert(1);
+        bst.insert(2);
+        bst.insert(7);
+        bst.insert(3);
+        assertEquals("1 2 3 7 ", bst.inOrder());
+    	
     }
 
     @Test
@@ -32,11 +45,15 @@ class BSTTest {
         bst.insert(3);
         bst.insert(7);
         bst.delete(3);
+        
         assertEquals("5 7 ", bst.inOrder());
         bst.delete(5);
+        
         assertEquals("7 ", bst.inOrder());
         bst.delete(7);
+        
         assertEquals("", bst.inOrder());
+        
 
         // Test connections
         assertNull(bst.root);
@@ -47,11 +64,32 @@ class BSTTest {
         bst.insert(2);
         bst.insert(4);
         bst.insert(6);
-
+        
         bst.delete(4);
+        
+        
         assertEquals("2 3 5 6 7 ", bst.inOrder());
+       
         assertEquals(3, bst.root.left.value);
         assertEquals(null, bst.root.left.right);
+    }
+    
+    @Test
+    void testDelete2() {
+    	BST bst = new BST();
+    	assertEquals("", bst.inOrder()); // empty
+        bst.insert(1);
+        bst.insert(2);
+        bst.insert(7);
+        bst.insert(3);
+        assertEquals("1 2 3 7 ", bst.inOrder());
+        bst.delete(0); // element not found
+        assertEquals("1 2 3 7 ", bst.inOrder());
+        bst.delete(7);
+        assertEquals("1 2 3 ", bst.inOrder());
+        bst.delete(1);
+        assertEquals("2 3 ", bst.inOrder()); // remove root
+    	
     }
 
 }

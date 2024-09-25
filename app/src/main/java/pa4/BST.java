@@ -34,6 +34,30 @@ public class BST {
      * @param value the value of the node to insert
      */
     public void insert(int value) {
+    	if (root == null) {
+    		root = new Node(value);
+    	}
+    	Node curr = root;
+    	while (true) {
+    		if (curr.value == value) {
+    			break;
+    		}
+    		if (curr.value < value) {
+    			if (curr.right == null){
+    				curr.right = new Node(value);
+    				break;
+    			}
+    			curr = curr.right;
+    		}
+    		if (curr.value > value) {
+    			if (curr.left == null){
+    				curr.left = new Node(value);
+    				break;
+    			}
+    			curr = curr.left;
+    		}
+    	}
+    		
         
     }
 
@@ -41,9 +65,74 @@ public class BST {
     /** 
      * Delete a node with a given value from the BST.
      * @param value the value of the node to delete
+     *
      */
+    private void remove(Node node, Node parent, boolean left) {
+    	if (node.left == null && node.right == null) {
+    		if (left)
+    			parent.left = null;
+    		else
+    			parent.right = null;
+    		return;
+    	}
+    	if (node.left == null) {
+    		if (left)
+    			parent.left = node.right;
+    		else
+    			parent.right = node.right;
+    		return;
+    	}
+    	if (node.right == null) {
+    		if (left)
+    			parent.left = node.left;
+    		else
+    			parent.right = node.left;
+    		return;
+    	}
+    	Node after = node.right;
+    	Node pre_after = node;
+    	while (after.left != null) {
+    		pre_after = after;
+    		after = after.left;
+    	}
+    	int tmp = after.value;
+    	after.value = node.value;
+    	node.value = tmp;
+    	if (after == node.right)
+    		remove(after, pre_after, false);
+    	else
+    		remove(after, pre_after, true);
+    }
     public void delete(int value) {
-        
+    	if (search(value) == false) {
+    		return;
+    	}
+        if (root.value ==value) {
+        	Node tmp_head = new Node(0);
+        	tmp_head.right = root;
+        	remove(root, tmp_head, false);
+        	root = tmp_head.right;
+        	return;
+        }
+        else {
+        	Node parent = root;
+        	while (true) {
+        		if (parent.left != null && parent.left.value == value) {
+        			remove(parent.left, parent, true);
+        			return;
+        		}
+        		if (parent.right != null && parent.right.value == value) {
+        			remove(parent.right, parent, false);
+        			return;
+        		}
+        		if (parent.value < value)
+        			parent = parent.right;
+        		else
+        			parent = parent.left;
+	        		
+        	}
+
+        }
     }
 
     /** 
@@ -51,7 +140,16 @@ public class BST {
      * @param value the value to search for
      */
     public boolean search(int value) {
-        
+    	Node curr = root;
+        while (curr != null) {
+        	if (curr.value == value)
+        		return true;
+        	if (curr.value > value)
+        		curr = curr.left;
+        	else
+        		curr = curr.right;
+        }
+        return false;
     }
 
     /** 
@@ -60,29 +158,55 @@ public class BST {
      * @param newValue the new value of the node to update
      */
     public void update(int oldValue, int newValue) {
-
+    	delete(oldValue);
+    	insert(newValue);
     }
 
     /** 
      * Traverse the BST in inorder and return the values as a string. 
      * @return the inorder traversal of the BST
      */
+    private String inOrder(Node node) {
+    	if (node == null)
+    		return "";
+    	return inOrder(node.left) + node.value + " " + inOrder(node.right);
+    }
     public String inOrder() {
-     
+    	return inOrder(root);
     }
 
     /** 
      * Convert a sorted array to a balanced BST.
      */
+    public static Node sort_help(int[] arr, int i, int j) {
+    	if (i > j)
+    		return null;
+    	int mid = (i+j) / 2;
+    	Node root = new Node(arr[mid]);
+    	root.left = sort_help(arr, i, mid-1);
+    	root.left = sort_help(arr, mid + 1, j);
+    	return root;
+    }
     public static Node sortedArrayToBST(int[] arr) {
-        
+        return sort_help(arr, 0, arr.length - 1);
     }
 
     /** 
      * Find the lowest common ancestor of two nodes with given values in the BST.
      */
     public Node lowestCommonAncestor(int value1, int value2) {
-        
+    	if (value1 < value2)
+    		return lowestCommonAncestor(value2, value1);
+        Node curr = root;
+        while (! (curr.value <= value1 && curr.value >= value2)) {
+        	if (curr.value < value1)
+        		curr = curr.right;
+        	else
+        		curr = curr.left;
+        }
+        return curr;
+        	
+        	
     }
 
     public static void main(String[] args) {
@@ -101,6 +225,10 @@ public class BST {
         System.out.println(bst.inOrder());
         System.out.println(bst.search(3));
         System.out.println(bst.search(4));
+        
+        //System.out.println("fdiserugnbseaig");
+        //System.out.println(bst.root.left.right.value);
+        
         bst.update(4, 9);
         System.out.println(bst.inOrder());
 
