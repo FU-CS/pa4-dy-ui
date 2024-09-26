@@ -87,9 +87,115 @@ class BSTTest {
         assertEquals("1 2 3 7 ", bst.inOrder());
         bst.delete(7);
         assertEquals("1 2 3 ", bst.inOrder());
-        bst.delete(1);
-        assertEquals("2 3 ", bst.inOrder()); // remove root
+        bst.delete(1); // remove root
+        assertEquals("2 3 ", bst.inOrder()); 
     	
+    }
+    @Test
+    void testDelete3() {
+    	BST bst = new BST();
+        bst.insert(10);
+        bst.insert(7);
+        bst.insert(5);
+        bst.insert(6);
+        bst.delete(5); // remove node with only right child and it is left child
+        assertEquals("6 7 10 ", bst.inOrder()); 
+    }
+    @Test
+    void testDelete4() {
+    	BST bst = new BST();
+        bst.insert(10);
+        bst.insert(7);
+        bst.insert(5);
+        bst.insert(3);
+        bst.delete(5); // remove node with only left child and it is left child
+        assertEquals("3 7 10 ", bst.inOrder()); 
+    }
+    @Test
+    void testDelete5() {
+    	BST bst = new BST();
+        bst.insert(10);
+        bst.insert(7);
+        bst.insert(9);
+        bst.insert(8);
+        bst.delete(9); // remove node with only left child and it is right child
+        assertEquals("7 8 10 ", bst.inOrder()); 
+    }
+    @Test
+    void testDelete6() {
+    	BST bst = new BST();
+        bst.insert(10);
+        bst.insert(7);
+        bst.insert(8);
+        bst.insert(9);
+        bst.delete(8); // remove node with only right child and it is right child
+        assertEquals("7 9 10 ", bst.inOrder()); 
+    }
+    
+    @Test
+    void testSearch() {
+    	BST bst = new BST();
+    	bst.insert(0);
+    	bst.insert(6);
+    	bst.insert(1);
+    	bst.insert(-9);
+    	assertEquals(true, bst.search(0));
+    	assertEquals(true, bst.search(6));
+    	assertEquals(true, bst.search(1));
+    	assertEquals(true, bst.search(-9));
+    	assertEquals(false, bst.search(90));
+    }
+    
+    @Test
+    void testInOrdder() {
+    	BST bst = new BST();
+    	bst.insert(0);
+    	bst.insert(6);
+    	bst.insert(1);
+    	bst.insert(-9);
+    	assertEquals("-9 0 1 6 ", bst.inOrder());
+    }
+    
+    @Test
+    void testArrtobst() {
+    	int[] arr = {1, 4, 5, 6, 8, 90};
+    	BST bst = new BST();
+    	bst.root = BST.sortedArrayToBST(arr);
+    	assertEquals((int) (Math.log(arr.length) / Math.log(2))  + 1, bst.height());
+    }
+    
+    @Test
+    void testArrtobst2() {
+    	int[] arr = {-9, -4, 0, 1, 4, 5, 6, 8, 90, 100, 200, 230, 231};
+    	BST bst = new BST();
+    	bst.root = BST.sortedArrayToBST(arr);
+    	assertEquals((int) (Math.log(arr.length) / Math.log(2)) + 1, bst.height());
+    }
+    
+    @Test
+    void testLowestAns() {
+    	BST bst = new BST();
+    	bst.insert(5);
+    	bst.insert(3);
+    	bst.insert(2);
+    	bst.insert(4);
+    	bst.insert(10);
+    	bst.insert(6);
+    	bst.insert(20);
+    	bst.insert(30);
+    	assertEquals(5, bst.lowestCommonAncestor(3, 10).value); // root is common
+    	
+    	assertEquals(10, bst.lowestCommonAncestor(6, 20).value); //direct siblings
+    	
+    	assertEquals(10, bst.lowestCommonAncestor(6, 30).value); //not siblings
+    	
+    	assertEquals(10, bst.lowestCommonAncestor(10, 30).value); //one node is a descendant of the other
+    	
+    	assertEquals(10, bst.lowestCommonAncestor(30, 10).value); //commutativity
     }
 
 }
+
+
+
+

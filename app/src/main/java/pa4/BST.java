@@ -104,36 +104,28 @@ public class BST {
     		remove(after, pre_after, true);
     }
     public void delete(int value) {
-    	if (search(value) == false) {
+    	if (! search(value))
     		return;
+    	Node dummyRoot = new Node(0);
+    	dummyRoot.right = root;
+    	Node parent = dummyRoot;
+    	Node curr = root;
+    	boolean left = false;
+    	while (curr.value != value) {
+    		parent = curr;
+    		if (curr.value > value) {
+    			curr = curr.left;
+    			left = true;
+    		}
+    		else {
+    			curr = curr.right;
+    			left = false;
+    		}
     	}
-        if (root.value ==value) {
-        	Node tmp_head = new Node(0);
-        	tmp_head.right = root;
-        	remove(root, tmp_head, false);
-        	root = tmp_head.right;
-        	return;
-        }
-        else {
-        	Node parent = root;
-        	while (true) {
-        		if (parent.left != null && parent.left.value == value) {
-        			remove(parent.left, parent, true);
-        			return;
-        		}
-        		if (parent.right != null && parent.right.value == value) {
-        			remove(parent.right, parent, false);
-        			return;
-        		}
-        		if (parent.value < value)
-        			parent = parent.right;
-        		else
-        			parent = parent.left;
-	        		
-        	}
-
-        }
+    	remove(curr, parent, left);
+    	root = dummyRoot.right;
     }
+    
 
     /** 
      * Search for a node with a given value in the BST and return true if found.
@@ -208,6 +200,15 @@ public class BST {
         	
         	
     }
+    
+    public int height() {
+    	return heightHelper(root);
+    }
+    private int heightHelper(Node root) {
+    	if (root == null)
+    		return 0;
+    	return 1 + Math.max(heightHelper(root.left), heightHelper(root.right));
+    }
 
     public static void main(String[] args) {
 
@@ -238,6 +239,9 @@ public class BST {
 
         System.out.println(bst.lowestCommonAncestor(2, 4).value);
         System.out.println(bst.lowestCommonAncestor(2, 6).value);
+        
+        int j = 15;
+        System.out.println((int) (Math.log(j) / Math.log(2)));
 
     }
 }
